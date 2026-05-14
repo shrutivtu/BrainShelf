@@ -48,3 +48,45 @@ create policy "Users manage own app_state"
   on app_state for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+-- ──────────────────────────────────────────────────────────────────────
+-- Long-form Notes section
+-- ──────────────────────────────────────────────────────────────────────
+
+create table note_folders (
+  id         text primary key,
+  user_id    uuid not null references auth.users(id) on delete cascade,
+  name       text not null default '',
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+create index note_folders_user_id_idx on note_folders(user_id);
+
+create table long_notes (
+  id         text primary key,
+  user_id    uuid not null references auth.users(id) on delete cascade,
+  title      text not null default '',
+  content    jsonb not null default '{}'::jsonb,
+  folder_id  text references note_folders(id) on delete set null,
+  tags       text[] not null default '{}',
+  is_pinned  boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index long_notes_user_id_idx on long_notes(user_id);
+create index long_notes_folder_id_idx on long_notes(folder_id);
+
+alter table note_folders enable row level security;
+alter table long_notes enable row level security;
+
+create policy "Users manage own note_folders"
+  on note_folders for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+create policy "Users manage own long_notes"
+  on long_notes for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);

@@ -3,6 +3,7 @@ import AuthGate from './components/AuthGate.jsx';
 import BrainDump from './components/BrainDump.jsx';
 import HealthActions from './components/HealthActions.jsx';
 import NoteList from './components/NoteList.jsx';
+import NotesView from './components/NotesView.jsx';
 import OneThingCard from './components/OneThingCard.jsx';
 import SectionNav from './components/SectionNav.jsx';
 import TodayPanel from './components/TodayPanel.jsx';
@@ -35,6 +36,7 @@ function AppInner({ userId, onSignOut }) {
   const [oneThingId, setOneThingId] = useState(null);
   const [settings, setSettings] = useState({});
   const [activeSection, setActiveSection] = useState('inbox');
+  const [viewMode, setViewMode] = useState('tasks');
   const [personFilter, setPersonFilter] = useState('');
   const [dumpText, setDumpText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -366,6 +368,25 @@ function AppInner({ userId, onSignOut }) {
     );
   }
 
+  if (viewMode === 'notes') {
+    return (
+      <div className="bs-root app-root">
+        {toast ? (
+          <div className="toast is-visible" role="status" aria-live="polite">
+            {toast}
+          </div>
+        ) : null}
+        <NotesView
+          userId={userId}
+          onBack={() => setViewMode('tasks')}
+          onSignOut={onSignOut}
+          darkMode={settings.darkMode}
+          onToggleDarkMode={toggleDarkMode}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="bs-root app-root">
       {toast ? (
@@ -376,7 +397,7 @@ function AppInner({ userId, onSignOut }) {
 
       <div className="app-frame">
         <aside className="rail" aria-label="Shelves">
-          <SectionNav activeSection={activeSection} onSelect={setActiveSection} noteCounts={noteCounts} />
+          <SectionNav activeSection={activeSection} onSelect={setActiveSection} noteCounts={noteCounts} viewMode={viewMode} onSwitchView={setViewMode} />
         </aside>
 
         <div className="page">

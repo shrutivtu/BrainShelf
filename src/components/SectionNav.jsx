@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { SECTIONS } from '../utils/noteModel.js';
 
-export default function SectionNav({ activeSection, onSelect, noteCounts }) {
+export default function SectionNav({ activeSection, onSelect, noteCounts, viewMode, onSwitchView }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -15,8 +15,18 @@ export default function SectionNav({ activeSection, onSelect, noteCounts }) {
 
   const handleSelect = (id) => {
     onSelect(id);
+    if (viewMode !== 'tasks') onSwitchView('tasks');
     setOpen(false);
   };
+
+  const handleNotesClick = () => {
+    onSwitchView('notes');
+    setOpen(false);
+  };
+
+  const currentLabel = viewMode === 'notes'
+    ? 'Notes'
+    : (SECTIONS.find((s) => s.id === activeSection)?.label || 'Shelves');
 
   return (
     <nav className="section-nav" aria-label="Shelves">
@@ -41,9 +51,7 @@ export default function SectionNav({ activeSection, onSelect, noteCounts }) {
             </>
           )}
         </svg>
-        <span className="section-nav__burger-label">
-          {SECTIONS.find((s) => s.id === activeSection)?.label || 'Shelves'}
-        </span>
+        <span className="section-nav__burger-label">{currentLabel}</span>
       </button>
 
       {open && (
@@ -57,7 +65,7 @@ export default function SectionNav({ activeSection, onSelect, noteCounts }) {
             <li key={id}>
               <button
                 type="button"
-                className={`section-nav__item${activeSection === id ? ' is-active' : ''}`}
+                className={`section-nav__item${viewMode === 'tasks' && activeSection === id ? ' is-active' : ''}`}
                 onClick={() => handleSelect(id)}
               >
                 <span>{label}</span>
@@ -68,6 +76,24 @@ export default function SectionNav({ activeSection, onSelect, noteCounts }) {
             </li>
           ))}
         </ul>
+
+        <div className="section-nav__divider" />
+        <button
+          type="button"
+          className={`section-nav__item section-nav__item--notes${viewMode === 'notes' ? ' is-active' : ''}`}
+          onClick={handleNotesClick}
+        >
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 6, verticalAlign: -2 }}>
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+            Notes
+          </span>
+        </button>
       </div>
     </nav>
   );
