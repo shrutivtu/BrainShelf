@@ -1,0 +1,17 @@
+{
+  "name": "BrainShelf",
+  "short_name": "BrainShelf",
+  "description": "A calm notebook for your thoughts.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F4F0E8",
+  "theme_color": "#7A8F76",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
