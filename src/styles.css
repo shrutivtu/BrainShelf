@@ -1489,6 +1489,10 @@ button.item-text--editable:hover {
   background: var(--surface-sunk);
   padding: var(--space-5) var(--space-4);
   overflow-y: auto;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100%;
 }
 
 /* ——— Notes list pane ——— */

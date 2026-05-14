@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { SECTIONS } from '../utils/noteModel.js';
+import { navigate } from '../utils/router.js';
 
-export default function SectionNav({ activeSection, onSelect, noteCounts, viewMode, onSwitchView }) {
+export default function SectionNav({ activeSection, onSelect, noteCounts }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -15,18 +16,15 @@ export default function SectionNav({ activeSection, onSelect, noteCounts, viewMo
 
   const handleSelect = (id) => {
     onSelect(id);
-    if (viewMode !== 'tasks') onSwitchView('tasks');
     setOpen(false);
   };
 
   const handleNotesClick = () => {
-    onSwitchView('notes');
+    navigate('/notes');
     setOpen(false);
   };
 
-  const currentLabel = viewMode === 'notes'
-    ? 'Notes'
-    : (SECTIONS.find((s) => s.id === activeSection)?.label || 'Shelves');
+  const currentLabel = SECTIONS.find((s) => s.id === activeSection)?.label || 'Shelves';
 
   return (
     <nav className="section-nav" aria-label="Shelves">
@@ -65,7 +63,7 @@ export default function SectionNav({ activeSection, onSelect, noteCounts, viewMo
             <li key={id}>
               <button
                 type="button"
-                className={`section-nav__item${viewMode === 'tasks' && activeSection === id ? ' is-active' : ''}`}
+                className={`section-nav__item${activeSection === id ? ' is-active' : ''}`}
                 onClick={() => handleSelect(id)}
               >
                 <span>{label}</span>
@@ -80,7 +78,7 @@ export default function SectionNav({ activeSection, onSelect, noteCounts, viewMo
         <div className="section-nav__divider" />
         <button
           type="button"
-          className={`section-nav__item section-nav__item--notes${viewMode === 'notes' ? ' is-active' : ''}`}
+          className="section-nav__item section-nav__item--notes"
           onClick={handleNotesClick}
         >
           <span>

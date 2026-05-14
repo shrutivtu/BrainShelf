@@ -15,15 +15,34 @@ import {
   saveLocalNotes,
 } from '../utils/notesStorage.js';
 
+function readNoteIdFromUrl() {
+  return new URLSearchParams(window.location.search).get('id') || null;
+}
+
+function writeNoteIdToUrl(id) {
+  const url = new URL(window.location);
+  if (id) {
+    url.searchParams.set('id', id);
+  } else {
+    url.searchParams.delete('id');
+  }
+  window.history.replaceState(null, '', url);
+}
+
 export default function NotesView({ userId, onBack, onSignOut, darkMode, onToggleDarkMode }) {
   const [longNotes, setLongNotes] = useState([]);
   const [folders, setFolders] = useState([]);
-  const [activeNoteId, setActiveNoteId] = useState(null);
+  const [activeNoteId, setActiveNoteIdRaw] = useState(readNoteIdFromUrl);
   const [activeFolderId, setActiveFolderId] = useState(null);
   const [activeTag, setActiveTag] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showImport, setShowImport] = useState(false);
   const [loaded, setLoaded] = useState(false);
+
+  const setActiveNoteId = useCallback((id) => {
+    setActiveNoteIdRaw(id);
+    writeNoteIdToUrl(id);
+  }, []);
 
   const debounceRef = useRef(null);
 

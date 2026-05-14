@@ -64,7 +64,7 @@ export default function NotesList({
     }
     list.sort((a, b) => {
       if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
-      return (b.updatedAt || '').localeCompare(a.updatedAt || '');
+      return (b.createdAt || '').localeCompare(a.createdAt || '');
     });
     return list;
   }, [notes, activeFolderId, activeTag, searchQuery]);

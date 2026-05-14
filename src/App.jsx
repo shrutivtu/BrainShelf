@@ -8,6 +8,7 @@ import OneThingCard from './components/OneThingCard.jsx';
 import SectionNav from './components/SectionNav.jsx';
 import TodayPanel from './components/TodayPanel.jsx';
 import { createNote, nowIso } from './utils/noteModel.js';
+import { navigate, useRoute } from './utils/router.js';
 import {
   archiveCloudNotesByDone,
   deleteCloudNote,
@@ -32,11 +33,13 @@ const HEALTH_COPY = {
 const MAX_TODAY = 3;
 
 function AppInner({ userId, onSignOut }) {
+  const route = useRoute();
+  const isNotesPage = route === '/notes';
+
   const [notes, setNotes] = useState([]);
   const [oneThingId, setOneThingId] = useState(null);
   const [settings, setSettings] = useState({});
   const [activeSection, setActiveSection] = useState('inbox');
-  const [viewMode, setViewMode] = useState('tasks');
   const [personFilter, setPersonFilter] = useState('');
   const [dumpText, setDumpText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -368,7 +371,7 @@ function AppInner({ userId, onSignOut }) {
     );
   }
 
-  if (viewMode === 'notes') {
+  if (isNotesPage) {
     return (
       <div className="bs-root app-root">
         {toast ? (
@@ -378,7 +381,7 @@ function AppInner({ userId, onSignOut }) {
         ) : null}
         <NotesView
           userId={userId}
-          onBack={() => setViewMode('tasks')}
+          onBack={() => navigate('/')}
           onSignOut={onSignOut}
           darkMode={settings.darkMode}
           onToggleDarkMode={toggleDarkMode}
@@ -397,7 +400,7 @@ function AppInner({ userId, onSignOut }) {
 
       <div className="app-frame">
         <aside className="rail" aria-label="Shelves">
-          <SectionNav activeSection={activeSection} onSelect={setActiveSection} noteCounts={noteCounts} viewMode={viewMode} onSwitchView={setViewMode} />
+          <SectionNav activeSection={activeSection} onSelect={setActiveSection} noteCounts={noteCounts} />
         </aside>
 
         <div className="page">
