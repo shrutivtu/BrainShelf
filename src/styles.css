@@ -2367,6 +2367,60 @@ button.item-text--editable:hover {
 }
 
 /* ══════════════════════════════════════════════════════════════════════
+   NOTES — Tablet (iPad portrait): 2-column, relaxed, no sidebar
+   Covers iPad Mini (768px), iPad Air (820px), iPad Pro 11" (834px)
+   ══════════════════════════════════════════════════════════════════════ */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  /* Hide folders sidebar — use filter dropdown in the list instead */
+  .nv-body {
+    grid-template-columns: 300px 1fr;
+  }
+
+  .nv-sidebar {
+    display: none;
+  }
+
+  .nv-list-pane {
+    border-right: 1px solid var(--surface-line);
+  }
+
+  /* Give the editor more breathing room */
+  .nv-editor-pane {
+    padding: var(--space-5) var(--space-6);
+  }
+
+  .ne-title {
+    font-size: 24px;
+  }
+
+  /* Show folder filters in list since sidebar is hidden */
+  .nl-filters {
+    display: block;
+  }
+
+  /* Slightly larger touch targets */
+  .nl-item__btn {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .nl-item__del {
+    opacity: 1;
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Editor topbar */
+  .nv-editor-topbar {
+    margin-bottom: var(--space-2);
+  }
+
+  .nv-folder-badge {
+    font-size: var(--text-sm);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
    NOTES — Mobile: calm, spacious, one-thing-at-a-time
    ══════════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
