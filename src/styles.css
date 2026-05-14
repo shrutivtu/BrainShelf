@@ -160,6 +160,14 @@
   border-right: 1px solid var(--surface-line);
 }
 
+.section-nav__burger {
+  display: none;
+}
+
+.section-nav__overlay {
+  display: none;
+}
+
 .section-nav__hint {
   font-size: var(--text-xs);
   color: var(--ink-3);
@@ -414,6 +422,8 @@ button.item-text {
   text-align: left;
   padding: 0;
   width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 ul.recent-list {
@@ -967,39 +977,93 @@ button.item-text--editable:hover {
   .app-frame {
     grid-template-columns: 1fr;
     padding: var(--space-4) var(--space-4) var(--space-10);
-    gap: var(--space-5);
+    gap: 0;
+  }
+
+  .app-frame > .rail {
+    position: static;
+    padding: 0;
+    border-right: none;
+    border-bottom: none;
   }
 
   .rail {
-    position: static;
-    padding: 0 0 var(--space-3);
+    padding-right: 0;
     border-right: none;
-    border-bottom: 1px solid var(--surface-line);
   }
 
-  .section-nav__hint {
-    display: none;
+  /* ——— Hamburger button ——— */
+  .section-nav__burger {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) 0;
+    color: var(--ink-1);
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-md);
   }
 
-  .section-nav__list {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: var(--space-1);
-    padding-bottom: var(--space-2);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .section-nav__list::-webkit-scrollbar {
-    display: none;
-  }
-
-  .section-nav__item {
+  .section-nav__burger svg {
     flex-shrink: 0;
-    width: auto;
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--text-xs);
+    color: var(--ink-2);
+  }
+
+  .section-nav__burger-label {
+    color: var(--ink-1);
+  }
+
+  /* ——— Drawer overlay ——— */
+  .section-nav__overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 90;
+  }
+
+  /* ——— Slide-in drawer ——— */
+  .section-nav__drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    background: var(--canvas);
+    border-right: 1px solid var(--surface-line);
+    z-index: 100;
+    padding: var(--space-6) var(--space-5);
+    transform: translateX(-100%);
+    transition: transform var(--duration-2) var(--ease-out);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .section-nav__drawer.is-open {
+    transform: translateX(0);
+  }
+
+  .section-nav__drawer .section-nav__hint {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+
+  .section-nav__drawer .section-nav__list {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .section-nav__drawer .section-nav__item {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+    border-radius: var(--radius-lg);
+  }
+
+  .app-frame > .page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding-top: var(--space-3);
   }
 
   .focus-band {
@@ -1030,33 +1094,38 @@ button.item-text--editable:hover {
     gap: var(--space-2);
   }
 
+  /* ——— Compact note cards on mobile ——— */
+  .item.item--stacked {
+    padding: var(--space-3);
+    gap: var(--space-1);
+  }
+
   .item-row {
-    flex-wrap: wrap;
     gap: 8px;
+  }
+
+  .item-text {
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .item .item-actions {
     opacity: 1;
-    width: 100%;
-    justify-content: flex-start;
     flex-wrap: wrap;
     gap: 4px;
-    padding-top: 4px;
+  }
+
+  .item-action--text {
+    font-size: 11px;
+    padding: 3px 8px;
   }
 
   .item-meta {
-    padding-left: 0;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
-  .item-meta select,
-  .item-meta input[type="text"] {
-    max-width: 120px;
+    display: none;
   }
 
   .item-toggles {
-    padding-left: 0;
+    display: none;
   }
 
   .item-subtasks {
@@ -1067,12 +1136,8 @@ button.item-text--editable:hover {
     padding-left: 0;
   }
 
-  .item.item--stacked {
-    padding: var(--space-3);
-  }
-
   .drag-handle {
-    opacity: 0.35;
+    display: none;
   }
 
   .dump-input {
@@ -1122,15 +1187,6 @@ button.item-text--editable:hover {
 
   .one-thing-text {
     font-size: 22px;
-  }
-
-  .item-colors {
-    gap: 4px;
-  }
-
-  .item-color-dot {
-    width: 18px;
-    height: 18px;
   }
 }
 
