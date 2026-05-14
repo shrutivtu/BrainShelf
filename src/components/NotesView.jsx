@@ -186,19 +186,23 @@ export default function NotesView({ userId, onBack, onSignOut, darkMode, onToggl
   }, [userId, activeFolderId]);
 
   // ── Import ──────────────────────────────────────────────────────────
-  const handleImportNotes = useCallback((items) => {
-    let importFolder = folders.find((f) => f.name === 'Imported');
-    if (!importFolder) {
-      importFolder = createFolder('Imported');
-      setFolders((prev) => [...prev, importFolder]);
-      if (userId) saveCloudFolder(importFolder, userId);
+  const handleImportNotes = useCallback((items, targetFolderId) => {
+    let folderId = targetFolderId;
+    if (!folderId) {
+      let importFolder = folders.find((f) => f.name === 'Imported');
+      if (!importFolder) {
+        importFolder = createFolder('Imported');
+        setFolders((prev) => [...prev, importFolder]);
+        if (userId) saveCloudFolder(importFolder, userId);
+      }
+      folderId = importFolder.id;
     }
 
     const newNotes = items.map((item) =>
       createLongNote({
         title: item.title,
         content: item.html || null,
-        folderId: importFolder.id,
+        folderId,
       })
     );
 
@@ -222,6 +226,7 @@ export default function NotesView({ userId, onBack, onSignOut, darkMode, onToggl
     <div className="nv-page">
       {showImport && (
         <NoteImport
+          folders={folders}
           onImportNotes={handleImportNotes}
           onClose={() => setShowImport(false)}
         />
@@ -294,6 +299,27 @@ export default function NotesView({ userId, onBack, onSignOut, darkMode, onToggl
         </div>
 
         <div className="nv-editor-pane">
+          {activeNote && (
+            <div className="nv-editor-topbar">
+              <select
+                className="nv-folder-badge"
+                value={activeNote.folderId || ''}
+                onChange={(e) => moveToFolder(e.target.value || null)}
+              >
+                <option value="">No folder</option>
+                {folders.map((f) => (
+                  <option key={f.id} value={f.id}>{f.name}</option>
+                ))}
+              </select>
+              <button
+                type="button"
+                className={`nv-pin-badge${activeNote.isPinned ? ' is-on' : ''}`}
+                onClick={togglePin}
+              >
+                {activeNote.isPinned ? '⊹ Pinned' : '⊹ Pin'}
+              </button>
+            </div>
+          )}
           <NoteEditor
             note={activeNote}
             onUpdateTitle={updateNoteTitle}
@@ -310,25 +336,6 @@ export default function NotesView({ userId, onBack, onSignOut, darkMode, onToggl
                   </span>
                 ))}
                 <TagInput onAdd={addTag} />
-              </div>
-              <div className="nv-note-actions">
-                <button
-                  type="button"
-                  className={`nv-action-btn${activeNote.isPinned ? ' is-on' : ''}`}
-                  onClick={togglePin}
-                >
-                  {activeNote.isPinned ? '⊹ Pinned' : '⊹ Pin'}
-                </button>
-                <select
-                  className="nv-folder-select"
-                  value={activeNote.folderId || ''}
-                  onChange={(e) => moveToFolder(e.target.value || null)}
-                >
-                  <option value="">No folder</option>
-                  {folders.map((f) => (
-                    <option key={f.id} value={f.id}>{f.name}</option>
-                  ))}
-                </select>
               </div>
             </div>
           )}

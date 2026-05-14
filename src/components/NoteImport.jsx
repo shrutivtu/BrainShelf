@@ -1,11 +1,12 @@
 import { useCallback, useRef, useState } from 'react';
 import { parseFiles, parseMarkdown } from '../utils/importParser.js';
 
-export default function NoteImport({ onImportNotes, onClose }) {
+export default function NoteImport({ folders, onImportNotes, onClose }) {
   const [mode, setMode] = useState(null);
   const [pasteText, setPasteText] = useState('');
   const [parsedItems, setParsedItems] = useState([]);
   const [importing, setImporting] = useState(false);
+  const [targetFolderId, setTargetFolderId] = useState('');
   const fileRef = useRef(null);
 
   const handleFiles = useCallback(async (e) => {
@@ -25,9 +26,9 @@ export default function NoteImport({ onImportNotes, onClose }) {
 
   const handleConfirm = useCallback(() => {
     setImporting(true);
-    onImportNotes(parsedItems);
+    onImportNotes(parsedItems, targetFolderId || null);
     onClose();
-  }, [parsedItems, onImportNotes, onClose]);
+  }, [parsedItems, targetFolderId, onImportNotes, onClose]);
 
   return (
     <div className="ni-overlay" onClick={onClose}>
@@ -98,6 +99,20 @@ export default function NoteImport({ onImportNotes, onClose }) {
                 </li>
               ))}
             </ul>
+            <div className="ni-folder-pick">
+              <label className="ni-folder-pick__label" htmlFor="ni-folder-select">Import into folder</label>
+              <select
+                id="ni-folder-select"
+                className="ni-folder-pick__select"
+                value={targetFolderId}
+                onChange={(e) => setTargetFolderId(e.target.value)}
+              >
+                <option value="">Imported (default)</option>
+                {(folders || []).map((f) => (
+                  <option key={f.id} value={f.id}>{f.name}</option>
+                ))}
+              </select>
+            </div>
             <div className="ni-paste__actions">
               <button type="button" className="ni-btn" onClick={() => { setMode(null); setParsedItems([]); }}>Back</button>
               <button type="button" className="ni-btn ni-btn--primary" onClick={handleConfirm} disabled={importing}>

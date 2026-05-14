@@ -1833,6 +1833,55 @@ button.item-text--editable:hover {
   background: var(--surface-line);
 }
 
+/* ──── Editor topbar (folder + pin, above title) ──── */
+.nv-editor-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.nv-folder-badge {
+  font-size: var(--text-xs);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--surface-line);
+  background: var(--surface-sunk);
+  color: var(--ink-2);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+}
+
+.nv-folder-badge:focus {
+  border-color: var(--accent-soft-line);
+  outline: none;
+}
+
+.nv-pin-badge {
+  font-size: var(--text-xs);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--surface-line);
+  color: var(--ink-3);
+  transition: all var(--duration-1) var(--ease-settle);
+}
+
+.nv-pin-badge:hover {
+  background: var(--surface-sunk);
+  color: var(--ink-1);
+}
+
+.nv-pin-badge.is-on {
+  background: var(--accent-soft);
+  color: var(--accent-press);
+  border-color: var(--accent-soft-line);
+}
+
 /* ──── NoteEditor ──── */
 .ne-editor {
   display: flex;
@@ -2110,40 +2159,6 @@ button.item-text--editable:hover {
   color: var(--ink-3);
 }
 
-.nv-note-actions {
-  display: flex;
-  gap: var(--space-2);
-  align-items: center;
-}
-
-.nv-action-btn {
-  font-size: var(--text-xs);
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--surface-line);
-  color: var(--ink-2);
-  transition: all var(--duration-1) var(--ease-settle);
-}
-
-.nv-action-btn:hover {
-  background: var(--surface-sunk);
-  color: var(--ink-1);
-}
-
-.nv-action-btn.is-on {
-  background: var(--accent-soft);
-  color: var(--accent-press);
-  border-color: var(--accent-soft-line);
-}
-
-.nv-folder-select {
-  font-size: var(--text-xs);
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--surface-line);
-  background: var(--surface-1);
-  color: var(--ink-1);
-}
 
 /* ──── Import modal ──── */
 .ni-overlay {
@@ -2261,6 +2276,30 @@ button.item-text--editable:hover {
   justify-content: flex-end;
   gap: var(--space-2);
   margin-top: var(--space-4);
+}
+
+/* ——— Import folder picker ——— */
+.ni-folder-pick {
+  margin-top: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.ni-folder-pick__label {
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.ni-folder-pick__select {
+  flex: 1;
+  font-size: var(--text-sm);
+  padding: 8px 12px;
+  border: 1px solid var(--surface-line);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  color: var(--ink-1);
 }
 
 .ni-btn {
@@ -2541,20 +2580,19 @@ button.item-text--editable:hover {
     width: 100px;
   }
 
-  .nv-note-actions {
-    width: 100%;
-    gap: var(--space-2);
+  .nv-editor-topbar {
+    margin-bottom: var(--space-2);
   }
 
-  .nv-action-btn {
+  .nv-folder-badge {
     font-size: var(--text-sm);
     padding: 6px 12px;
+    padding-right: 26px;
   }
 
-  .nv-folder-select {
+  .nv-pin-badge {
     font-size: var(--text-sm);
-    padding: 6px 10px;
-    flex: 1;
+    padding: 6px 12px;
   }
 
   /* ——— Import modal: full-width on mobile ——— */
