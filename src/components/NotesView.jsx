@@ -16,17 +16,25 @@ import {
 } from '../utils/notesStorage.js';
 
 function readNoteIdFromUrl() {
-  return new URLSearchParams(window.location.search).get('id') || null;
+  try {
+    return new URLSearchParams(window.location.search).get('id') || null;
+  } catch {
+    return null;
+  }
 }
 
 function writeNoteIdToUrl(id) {
-  const url = new URL(window.location);
-  if (id) {
-    url.searchParams.set('id', id);
-  } else {
-    url.searchParams.delete('id');
+  try {
+    const url = new URL(window.location.href);
+    if (id) {
+      url.searchParams.set('id', id);
+    } else {
+      url.searchParams.delete('id');
+    }
+    window.history.replaceState(null, '', url.pathname + url.search);
+  } catch {
+    // Tauri custom protocols may not support URL manipulation
   }
-  window.history.replaceState(null, '', url);
 }
 
 export default function NotesView({ userId, onBack, onSignOut, darkMode, onToggleDarkMode }) {

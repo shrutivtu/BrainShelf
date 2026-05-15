@@ -1951,41 +1951,145 @@ button.item-text--editable:hover {
   background: var(--surface-line);
 }
 
-/* ——— Editor content area (Tiptap) ——— */
+/* ——— Color picker ——— */
+.ne-color-picker {
+  position: relative;
+}
+
+.ne-color-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  gap: 1px;
+}
+
+.ne-color-icon__bar {
+  display: block;
+  width: 14px;
+  height: 3px;
+  border-radius: 1px;
+}
+
+.ne-color-icon--hl {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-2);
+  border: 1px solid var(--surface-line);
+}
+
+.ne-color-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 50;
+  margin-top: 4px;
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  background: var(--canvas);
+  border: 1px solid var(--surface-line);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.ne-color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color var(--duration-1) var(--ease-settle);
+}
+
+.ne-color-swatch:hover {
+  border-color: var(--surface-line);
+}
+
+.ne-color-swatch.is-active {
+  border-color: var(--accent);
+}
+
+.ne-color-swatch__fill {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--ink-3);
+  border: 1px solid var(--surface-line);
+}
+
+/* ——— Editor content area (Tiptap) — notepad feel ——— */
 .ne-content {
   flex: 1;
   min-height: 200px;
+  --notepad-row: 39.6px;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent calc(var(--notepad-row) - 1px),
+      var(--notepad-line, rgba(180, 170, 155, 0.22)) calc(var(--notepad-row) - 1px),
+      var(--notepad-line, rgba(180, 170, 155, 0.22)) var(--notepad-row)
+    );
+  background-size: 100% var(--notepad-row);
+  background-position-y: 4px;
+  padding: 4px 0;
+  border-left: 3px solid var(--notepad-margin, rgba(200, 120, 100, 0.18));
+  padding-left: var(--space-5);
+  margin-left: 2px;
 }
 
 .ne-body {
   outline: none;
-  font-size: var(--text-base);
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
   color: var(--ink-1);
-  line-height: 1.7;
+  line-height: 1.8em;
 }
 
 .ne-body p {
-  margin: 0 0 0.5em;
+  margin: 0;
+  min-height: 1.8em;
 }
 
 .ne-body h1 {
-  font-size: var(--text-xl);
-  font-weight: 600;
-  margin: 1em 0 0.3em;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  min-height: 1.8em;
   color: var(--ink-1);
 }
 
 .ne-body h2 {
-  font-size: var(--text-lg);
+  font-size: 28px;
   font-weight: 600;
-  margin: 0.8em 0 0.25em;
+  margin: 0;
+  min-height: 1.8em;
   color: var(--ink-1);
 }
 
 .ne-body h3 {
-  font-size: var(--text-base);
+  font-size: 24px;
   font-weight: 600;
-  margin: 0.6em 0 0.2em;
+  margin: 0;
+  min-height: 1.8em;
   color: var(--ink-1);
 }
 
@@ -2597,9 +2701,14 @@ button.item-text--editable:hover {
 
   /* Editor body: comfortable reading/writing size */
   .ne-body {
-    font-size: 16px;
-    line-height: 1.75;
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    line-height: 1.8em;
     -webkit-text-size-adjust: 100%;
+  }
+
+  .ne-content {
+    --notepad-row: 36px;
   }
 
   .ne-content {

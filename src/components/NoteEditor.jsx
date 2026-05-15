@@ -1,18 +1,97 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import Placeholder from '@tiptap/extension-placeholder';
-import { getEditorExtensions } from '../utils/editorExtensions.js';
+import { getEditorExtensions, INK_COLORS, HIGHLIGHT_COLORS } from '../utils/editorExtensions.js';
 
-function ToolbarButton({ active, onClick, title, children }) {
+const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
+function ToolbarButton({ active, onClick, title, children, className }) {
   return (
     <button
       type="button"
-      className={`ne-toolbar__btn${active ? ' is-active' : ''}`}
+      className={`ne-toolbar__btn${active ? ' is-active' : ''}${className ? ` ${className}` : ''}`}
       onClick={onClick}
-      title={title}
+      title={isTouchDevice ? undefined : title}
     >
       {children}
     </button>
+  );
+}
+
+function ColorPicker({ editor, type }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const isInk = type === 'ink';
+  const colors = isInk ? INK_COLORS : HIGHLIGHT_COLORS;
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, [open]);
+
+  let currentColor = null;
+  try {
+    currentColor = isInk
+      ? (editor.getAttributes('textStyle')?.color || null)
+      : (editor.getAttributes('highlight')?.color || null);
+  } catch { /* extension may not be ready */ }
+
+  const apply = (value) => {
+    try {
+      if (isInk) {
+        if (value) editor.chain().focus().setColor(value).run();
+        else editor.chain().focus().unsetColor().run();
+      } else {
+        if (value) editor.chain().focus().toggleHighlight({ color: value }).run();
+        else editor.chain().focus().unsetHighlight().run();
+      }
+    } catch { /* fallback if command not available */ }
+    setOpen(false);
+  };
+
+  return (
+    <div className="ne-color-picker" ref={ref}>
+      <button
+        type="button"
+        className={`ne-toolbar__btn${currentColor ? ' is-tinted' : ''}`}
+        onClick={() => setOpen(!open)}
+        title={isTouchDevice ? undefined : isInk ? 'Text color' : 'Highlight'}
+      >
+        {isInk ? (
+          <span className="ne-color-icon">
+            A
+            <span className="ne-color-icon__bar" style={{ background: currentColor || 'var(--ink-1)' }} />
+          </span>
+        ) : (
+          <span className="ne-color-icon ne-color-icon--hl" style={{ background: currentColor || 'transparent' }}>
+            H
+          </span>
+        )}
+      </button>
+      {open && (
+        <div className="ne-color-dropdown">
+          {colors.map((c) => (
+            <button
+              key={c.name}
+              type="button"
+              className={`ne-color-swatch${currentColor === c.value || (!currentColor && !c.value) ? ' is-active' : ''}`}
+              onClick={() => apply(c.value)}
+              title={c.name}
+            >
+              {isInk ? (
+                <span style={{ color: c.value || 'var(--ink-1)' }}>A</span>
+              ) : (
+                <span className="ne-color-swatch__fill" style={{ background: c.value || 'transparent' }}>
+                  {!c.value ? '—' : ''}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -41,6 +120,11 @@ function Toolbar({ editor }) {
       >
         <s>S</s>
       </ToolbarButton>
+
+      <span className="ne-toolbar__sep" />
+
+      <ColorPicker editor={editor} type="ink" />
+      <ColorPicker editor={editor} type="highlight" />
 
       <span className="ne-toolbar__sep" />
 

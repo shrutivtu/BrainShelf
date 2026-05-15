@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AuthGate from './components/AuthGate.jsx';
 import BrainDump from './components/BrainDump.jsx';
 import HealthActions from './components/HealthActions.jsx';
@@ -555,12 +555,44 @@ function AppInner({ userId, onSignOut }) {
   );
 }
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="bs-root" style={{ padding: 40, textAlign: 'center' }}>
+          <h2 style={{ color: 'var(--ink-1)', marginBottom: 12 }}>Something went wrong</h2>
+          <pre style={{ color: 'var(--status-error)', whiteSpace: 'pre-wrap', fontSize: 13, maxWidth: 600, margin: '0 auto' }}>
+            {this.state.error.message}
+          </pre>
+          <button
+            type="button"
+            style={{ marginTop: 20, padding: '8px 20px', borderRadius: 20, border: '1px solid var(--surface-line)', cursor: 'pointer' }}
+            onClick={() => { this.setState({ error: null }); navigate('/'); }}
+          >
+            Go back to Shelves
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
   return (
-    <AuthGate>
-      {({ userId, onSignOut }) => (
-        <AppInner userId={userId} onSignOut={onSignOut} />
-      )}
-    </AuthGate>
+    <ErrorBoundary>
+      <AuthGate>
+        {({ userId, onSignOut }) => (
+          <AppInner userId={userId} onSignOut={onSignOut} />
+        )}
+      </AuthGate>
+    </ErrorBoundary>
   );
 }
