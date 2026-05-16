@@ -3,6 +3,7 @@ export const SECTIONS = [
   { id: 'work', label: 'Work' },
   { id: 'personal', label: 'Personal' },
   { id: 'health', label: 'Health' },
+  { id: 'grocery', label: 'Grocery' },
   { id: 'people', label: 'People' },
   { id: 'random', label: 'Random' },
   { id: 'brainshelf', label: 'Brainshelf' },
@@ -16,6 +17,7 @@ export const COLORS = [
   { id: 'important', label: 'Important' },
   { id: 'idea', label: 'Idea' },
   { id: 'health', label: 'Health' },
+  { id: 'grocery', label: 'Grocery' },
   { id: 'people', label: 'People' },
 ];
 

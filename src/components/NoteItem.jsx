@@ -32,9 +32,10 @@ export default function NoteItem({
   isDragging,
   dragIndicator,
 }) {
+  const isGrocery = note.section === 'grocery';
   const [editingText, setEditingText] = useState(false);
   const [textDraft, setTextDraft] = useState(note.text);
-  const [showSubtasks, setShowSubtasks] = useState(false);
+  const [showSubtasks, setShowSubtasks] = useState(isGrocery);
   const [showComments, setShowComments] = useState(false);
   const [newSubtask, setNewSubtask] = useState('');
   const [newComment, setNewComment] = useState('');
@@ -299,7 +300,7 @@ export default function NoteItem({
           className={`item-toggle${showSubtasks ? ' is-open' : ''}`}
           onClick={() => setShowSubtasks(!showSubtasks)}
         >
-          Subtasks
+          {isGrocery ? 'Items' : 'Subtasks'}
           {subtasks.length > 0 && (
             <span className="item-toggle__badge">
               {subtasksDone}/{subtasks.length}
@@ -347,7 +348,7 @@ export default function NoteItem({
           <input
             type="text"
             className="item-subtask__add"
-            placeholder="Add a subtask…"
+            placeholder={isGrocery ? 'Add an item…' : 'Add a subtask…'}
             value={newSubtask}
             onChange={(e) => setNewSubtask(e.target.value)}
             onKeyDown={(e) => {

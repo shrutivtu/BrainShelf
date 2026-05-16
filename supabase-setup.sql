@@ -90,3 +90,10 @@ create policy "Users manage own long_notes"
   on long_notes for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+-- ──────────────────────────────────────────────────────────────────────
+-- Phase 2: Journal — kind column on long_notes
+-- ──────────────────────────────────────────────────────────────────────
+
+alter table long_notes add column if not exists kind text not null default 'note';
+create index if not exists long_notes_kind_idx on long_notes(user_id, kind);

@@ -85,6 +85,11 @@ export default function NotesView({ userId, onBack, onSignOut, darkMode, onToggl
   }, [longNotes, folders, loaded]);
 
   // ── Derived state ───────────────────────────────────────────────────
+  const visibleNotes = useMemo(
+    () => longNotes.filter((n) => !n.kind || n.kind === 'note'),
+    [longNotes]
+  );
+
   const activeNote = useMemo(
     () => longNotes.find((n) => n.id === activeNoteId) || null,
     [longNotes, activeNoteId]
@@ -289,7 +294,7 @@ export default function NotesView({ userId, onBack, onSignOut, darkMode, onToggl
 
         <div className="nv-list-pane">
           <NotesList
-            notes={longNotes}
+            notes={visibleNotes}
             activeNoteId={activeNoteId}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}

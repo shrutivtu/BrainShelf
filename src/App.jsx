@@ -2,12 +2,14 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import AuthGate from './components/AuthGate.jsx';
 import BrainDump from './components/BrainDump.jsx';
 import HealthActions from './components/HealthActions.jsx';
+import GroceryView from './components/GroceryView.jsx';
+import JournalView from './components/JournalView.jsx';
 import NoteList from './components/NoteList.jsx';
 import NotesView from './components/NotesView.jsx';
 import OneThingCard from './components/OneThingCard.jsx';
 import SectionNav from './components/SectionNav.jsx';
 import TodayPanel from './components/TodayPanel.jsx';
-import { createNote, nowIso } from './utils/noteModel.js';
+import { createNote, newId, nowIso } from './utils/noteModel.js';
 import { navigate, useRoute } from './utils/router.js';
 import {
   archiveCloudNotesByDone,
@@ -35,6 +37,7 @@ const MAX_TODAY = 3;
 function AppInner({ userId, onSignOut }) {
   const route = useRoute();
   const isNotesPage = route === '/notes';
+  const isJournalPage = route === '/journal';
 
   const [notes, setNotes] = useState([]);
   const [oneThingId, setOneThingId] = useState(null);
@@ -151,6 +154,7 @@ function AppInner({ userId, onSignOut }) {
       work: 0,
       personal: 0,
       health: 0,
+      grocery: 0,
       people: 0,
       random: 0,
       brainshelf: 0,
@@ -233,9 +237,25 @@ function AppInner({ userId, onSignOut }) {
   const handleDumpSubmit = useCallback((textFromField) => {
     const text = String(textFromField ?? dumpText).trim();
     if (!text) return;
+    if (activeSection === 'grocery') {
+      const list = notesRef.current.find((n) => n.section === 'grocery' && !n.isDone);
+      const newItem = { id: newId(), text, isDone: false };
+      if (list) {
+        updateNote(list.id, { subtasks: [...(list.subtasks || []), newItem] });
+      } else {
+        addNote({
+          text: 'Groceries',
+          section: 'grocery',
+          color: 'grocery',
+          subtasks: [newItem],
+        });
+      }
+      setDumpText('');
+      return;
+    }
     addNote({ text, section: 'inbox', color: 'default' });
     setDumpText('');
-  }, [dumpText, addNote]);
+  }, [dumpText, activeSection, addNote, updateNote]);
 
   const handleSetOneThing = useCallback((id) => {
     setOneThingId(id);
@@ -351,6 +371,40 @@ function AppInner({ userId, onSignOut }) {
     setToast('Archive emptied.');
   }, [userId]);
 
+  const groceryNote = useMemo(
+    () => notes.find((n) => n.section === 'grocery' && !n.isDone) || null,
+    [notes]
+  );
+
+  const handleUpdateGrocerySubtasks = useCallback((id, subtasks) => {
+    updateNote(id, { subtasks });
+  }, [updateNote]);
+
+  const handleCreateGroceryNote = useCallback((subtasks) => {
+    addNote({ text: 'Groceries', section: 'grocery', color: 'grocery', subtasks });
+  }, [addNote]);
+
+  const groceryBoughtCount = useMemo(() => {
+    let n = 0;
+    for (const note of notes) {
+      if (note.section !== 'grocery') continue;
+      for (const s of note.subtasks || []) if (s.isDone) n += 1;
+    }
+    return n;
+  }, [notes]);
+
+  const handleClearBought = useCallback(() => {
+    const toUpdate = [];
+    for (const n of notes) {
+      if (n.section !== 'grocery') continue;
+      if (!(n.subtasks || []).some((s) => s.isDone)) continue;
+      toUpdate.push({ id: n.id, subtasks: n.subtasks.filter((s) => !s.isDone) });
+    }
+    if (toUpdate.length === 0) return;
+    for (const u of toUpdate) updateNote(u.id, { subtasks: u.subtasks });
+    setToast('Bought items cleared.');
+  }, [notes, updateNote]);
+
   const toggleDarkMode = useCallback(() => {
     setSettings((prev) => ({ ...prev, darkMode: !prev.darkMode }));
   }, []);
@@ -361,7 +415,9 @@ function AppInner({ userId, onSignOut }) {
       ? 'Archive'
       : activeSection === 'done'
         ? 'Recent · Done'
-        : `Recent · ${activeSection.charAt(0).toUpperCase()}${activeSection.slice(1)}`;
+        : activeSection === 'grocery'
+          ? 'Grocery list'
+          : `Recent · ${activeSection.charAt(0).toUpperCase()}${activeSection.slice(1)}`;
 
   if (!dataLoaded) {
     return (
@@ -380,6 +436,25 @@ function AppInner({ userId, onSignOut }) {
           </div>
         ) : null}
         <NotesView
+          userId={userId}
+          onBack={() => navigate('/')}
+          onSignOut={onSignOut}
+          darkMode={settings.darkMode}
+          onToggleDarkMode={toggleDarkMode}
+        />
+      </div>
+    );
+  }
+
+  if (isJournalPage) {
+    return (
+      <div className="bs-root app-root">
+        {toast ? (
+          <div className="toast is-visible" role="status" aria-live="polite">
+            {toast}
+          </div>
+        ) : null}
+        <JournalView
           userId={userId}
           onBack={() => navigate('/')}
           onSignOut={onSignOut}
@@ -448,103 +523,117 @@ function AppInner({ userId, onSignOut }) {
             </div>
           </header>
 
-          <div className="focus-band">
-            <OneThingCard
-              note={oneThingNote}
-              candidateNotes={replaceCandidates}
-              onUpdateText={(id, text) => updateNote(id, { text })}
-              onMarkDone={handleOneThingMarkDone}
-              onClear={handleClearOneThing}
-              onSelectReplace={handleSetOneThing}
+          {activeSection !== 'grocery' && (
+            <>
+              <div className="focus-band">
+                <OneThingCard
+                  note={oneThingNote}
+                  candidateNotes={replaceCandidates}
+                  onUpdateText={(id, text) => updateNote(id, { text })}
+                  onMarkDone={handleOneThingMarkDone}
+                  onClear={handleClearOneThing}
+                  onSelectReplace={handleSetOneThing}
+                />
+                <TodayPanel todayNotes={todayNotes} onUnpinToday={handleUnpinToday} />
+              </div>
+
+              <HealthActions onCreateHealthNote={handleHealth} />
+
+              <BrainDump value={dumpText} onChange={setDumpText} onSubmit={handleDumpSubmit} />
+
+              <div className="search-bar">
+                <input
+                  type="search"
+                  className="search-input"
+                  placeholder="Search across all shelves…"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    className="search-clear"
+                    onClick={() => setSearchQuery('')}
+                    aria-label="Clear search"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+
+              {personOptions.length > 0 && !searchQuery.trim() ? (
+                <div className="person-filter">
+                  <span className="person-filter__label">People</span>
+                  <button
+                    type="button"
+                    className={`person-filter__chip${personFilter === '' ? ' is-on' : ''}`}
+                    onClick={() => setPersonFilter('')}
+                  >
+                    All
+                  </button>
+                  {personOptions.map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      className={`person-filter__chip${personFilter === p ? ' is-on' : ''}`}
+                      onClick={() => setPersonFilter(personFilter === p ? '' : p)}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </>
+          )}
+
+          {activeSection === 'grocery' ? (
+            <GroceryView
+              groceryNote={groceryNote}
+              onUpdateSubtasks={handleUpdateGrocerySubtasks}
+              onCreateGroceryNote={handleCreateGroceryNote}
             />
-            <TodayPanel todayNotes={todayNotes} onUnpinToday={handleUnpinToday} />
-          </div>
+          ) : (
+            <>
+              <NoteList
+                title={recentTitle}
+                notes={filteredForList}
+                oneThingId={oneThingId}
+                onUpdate={updateNote}
+                onSetOneThing={handleSetOneThing}
+                onPinToday={handlePinToday}
+                onToggleDone={handleToggleDone}
+                onDelete={deleteNote}
+                onArchive={archiveNote}
+                onRestore={restoreNote}
+                onReorder={handleReorder}
+                emptyMessage={
+                  activeSection === 'archive'
+                    ? 'Nothing archived yet.'
+                    : personFilter.trim()
+                      ? 'No notes for this person here.'
+                      : 'Nothing here yet. Add a thought above.'
+                }
+              />
 
-          <HealthActions onCreateHealthNote={handleHealth} />
+              {activeSection === 'done' && noteCounts.done > 0 ? (
+                <div className="clear-done-wrap">
+                  <button type="button" className="clear-done" onClick={handleClearDone}>
+                    Archive completed
+                  </button>
+                  <span className="clear-done__hint">done is good.</span>
+                </div>
+              ) : null}
 
-          <BrainDump value={dumpText} onChange={setDumpText} onSubmit={handleDumpSubmit} />
-
-          <div className="search-bar">
-            <input
-              type="search"
-              className="search-input"
-              placeholder="Search across all shelves…"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                className="search-clear"
-                onClick={() => setSearchQuery('')}
-                aria-label="Clear search"
-              >
-                ×
-              </button>
-            )}
-          </div>
-
-          {personOptions.length > 0 && !searchQuery.trim() ? (
-            <div className="person-filter">
-              <span className="person-filter__label">People</span>
-              <button
-                type="button"
-                className={`person-filter__chip${personFilter === '' ? ' is-on' : ''}`}
-                onClick={() => setPersonFilter('')}
-              >
-                All
-              </button>
-              {personOptions.map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  className={`person-filter__chip${personFilter === p ? ' is-on' : ''}`}
-                  onClick={() => setPersonFilter(personFilter === p ? '' : p)}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
-          ) : null}
-
-          <NoteList
-            title={recentTitle}
-            notes={filteredForList}
-            oneThingId={oneThingId}
-            onUpdate={updateNote}
-            onSetOneThing={handleSetOneThing}
-            onPinToday={handlePinToday}
-            onToggleDone={handleToggleDone}
-            onDelete={deleteNote}
-            onArchive={archiveNote}
-            onRestore={restoreNote}
-            onReorder={handleReorder}
-            emptyMessage={
-              activeSection === 'archive'
-                ? 'Nothing archived yet.'
-                : personFilter.trim()
-                  ? 'No notes for this person here.'
-                  : 'Nothing here yet. Add a thought above.'
-            }
-          />
-
-          {activeSection === 'done' && noteCounts.done > 0 ? (
-            <div className="clear-done-wrap">
-              <button type="button" className="clear-done" onClick={handleClearDone}>
-                Archive completed
-              </button>
-              <span className="clear-done__hint">done is good.</span>
-            </div>
-          ) : null}
-
-          {activeSection === 'archive' && noteCounts.archive > 0 ? (
-            <div className="clear-done-wrap">
-              <button type="button" className="clear-done" onClick={handleClearArchive}>
-                Empty archive
-              </button>
-              <span className="clear-done__hint">gone for good.</span>
-            </div>
-          ) : null}
+              {activeSection === 'archive' && noteCounts.archive > 0 ? (
+                <div className="clear-done-wrap">
+                  <button type="button" className="clear-done" onClick={handleClearArchive}>
+                    Empty archive
+                  </button>
+                  <span className="clear-done__hint">gone for good.</span>
+                </div>
+              ) : null}
+            </>
+          )}
         </div>
       </div>
 

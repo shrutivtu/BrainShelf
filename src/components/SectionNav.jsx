@@ -24,6 +24,11 @@ export default function SectionNav({ activeSection, onSelect, noteCounts }) {
     setOpen(false);
   };
 
+  const handleJournalClick = () => {
+    navigate('/journal');
+    setOpen(false);
+  };
+
   const currentLabel = SECTIONS.find((s) => s.id === activeSection)?.label || 'Shelves';
 
   return (
@@ -63,10 +68,18 @@ export default function SectionNav({ activeSection, onSelect, noteCounts }) {
             <li key={id}>
               <button
                 type="button"
-                className={`section-nav__item${activeSection === id ? ' is-active' : ''}`}
+                className={`section-nav__item${activeSection === id ? ' is-active' : ''}${id === 'grocery' ? ' section-nav__item--grocery' : ''}`}
                 onClick={() => handleSelect(id)}
               >
-                <span>{label}</span>
+                <span>
+                  {id === 'grocery' ? (
+                    <svg className="section-nav__leaf" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                      <path d="M11 20A7 7 0 0 1 4 13c0-5 4-9 9-9h7v7c0 5-4 9-9 9z" />
+                      <path d="M4 20c4-4 8-7 16-9" />
+                    </svg>
+                  ) : null}
+                  {label}
+                </span>
                 {noteCounts[id] != null && noteCounts[id] > 0 ? (
                   <span className="section-nav__count">{noteCounts[id]}</span>
                 ) : null}
@@ -90,6 +103,19 @@ export default function SectionNav({ activeSection, onSelect, noteCounts }) {
               <polyline points="10 9 9 9 8 9" />
             </svg>
             Notes
+          </span>
+        </button>
+        <button
+          type="button"
+          className="section-nav__item section-nav__item--journal"
+          onClick={handleJournalClick}
+        >
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 6, verticalAlign: -2 }}>
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+            </svg>
+            Journal
           </span>
         </button>
       </div>

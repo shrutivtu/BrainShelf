@@ -58,6 +58,8 @@
   --label-idea-soft:     #DDE5EC;
   --label-health:        #7A8F76;  /* sage (same as accent) */
   --label-health-soft:   #E4EBE0;
+  --label-grocery:       #6B8E4E;  /* leafy produce green */
+  --label-grocery-soft:  #E0E8D2;
   --label-people:        #9B86A8;  /* lavender */
   --label-people-soft:   #E7E0EC;
 
@@ -195,6 +197,8 @@
   --label-idea-soft:     #222E38;
   --label-health:        #8FA28B;
   --label-health-soft:   #2A3328;
+  --label-grocery:       #94B070;
+  --label-grocery-soft:  #2A3322;
   --label-people:        #AD98BA;
   --label-people-soft:   #2E2636;
 
