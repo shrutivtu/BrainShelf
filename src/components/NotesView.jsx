@@ -332,6 +332,7 @@ export default function NotesView({ userId, onBack, onSignOut, darkMode, onToggl
             note={activeNote}
             onUpdateTitle={updateNoteTitle}
             onUpdateContent={updateNoteContent}
+            onUpdatePageStyle={(style) => updateNoteMeta(activeNote.id, { pageStyle: style })}
             onBack={() => setActiveNoteId(null)}
           />
           {activeNote && (

@@ -1911,14 +1911,107 @@ button.item-text--editable:hover {
 }
 
 /* ——— Toolbar ——— */
-.ne-toolbar {
+.ne-toolbar-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 2px;
-  padding: var(--space-2) 0;
+  align-items: center;
+  gap: 4px;
   border-top: 1px solid var(--surface-line);
   border-bottom: 1px solid var(--surface-line);
   margin-bottom: var(--space-4);
+}
+
+.ne-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  gap: 2px;
+  padding: var(--space-2) 0;
+}
+
+.ne-sound-picker {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ne-sound-picker__trigger {
+  width: 34px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  opacity: 0.7;
+  transition: opacity var(--duration-1) var(--ease-settle);
+}
+
+.ne-sound-picker__trigger:hover {
+  opacity: 1;
+  background: var(--surface-sunk);
+}
+
+.ne-sound-picker__dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 4px;
+  min-width: 180px;
+  background: var(--surface-card);
+  border: 1px solid var(--surface-line);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 50;
+  padding: 6px 0;
+}
+
+.ne-sound-picker__title {
+  padding: 4px 14px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+
+.ne-sound-picker__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 14px;
+  font-size: 13px;
+  color: var(--ink-2);
+  text-align: left;
+  transition: background var(--duration-1) var(--ease-settle);
+}
+
+.ne-sound-picker__option:hover {
+  background: var(--surface-sunk);
+}
+
+.ne-sound-picker__option.is-active {
+  color: var(--ink-1);
+  font-weight: 500;
+  background: var(--surface-sunk);
+}
+
+.ne-sound-picker__icon {
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+}
+
+.ne-sound-picker__label {
+  flex: 1;
+}
+
+.ne-sound-picker__badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: var(--surface-sunk);
+  color: var(--ink-3);
+  font-weight: 500;
 }
 
 .ne-toolbar__btn {
@@ -2035,6 +2128,25 @@ button.item-text--editable:hover {
   border: 1px solid var(--surface-line);
 }
 
+/* ——— Style toggle button ——— */
+.ne-style-toggle {
+  flex-shrink: 0;
+  width: 34px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  opacity: 0.7;
+  transition: opacity var(--duration-1) var(--ease-settle);
+}
+
+.ne-style-toggle:hover {
+  opacity: 1;
+  background: var(--surface-sunk);
+}
+
 /* ——— Editor content area (Tiptap) — notepad feel ——— */
 .ne-content {
   flex: 1;
@@ -2056,12 +2168,44 @@ button.item-text--editable:hover {
   margin-left: 2px;
 }
 
+.ne-content--clean {
+  background: none;
+  border-left: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
 .ne-body {
   outline: none;
   font-family: 'Caveat', cursive;
   font-size: 22px;
   color: var(--ink-1);
   line-height: 1.8em;
+}
+
+.ne-content--clean .ne-body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: var(--text-base);
+  line-height: 1.7;
+}
+
+.ne-content--clean .ne-body h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+}
+
+.ne-content--clean .ne-body h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+}
+
+.ne-content--clean .ne-body h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+}
+
+.ne-title--clean {
+  font-family: 'Fraunces', serif !important;
 }
 
 .ne-body p {
@@ -2705,6 +2849,12 @@ button.item-text--editable:hover {
     font-size: 20px;
     line-height: 1.8em;
     -webkit-text-size-adjust: 100%;
+  }
+
+  .ne-content--clean .ne-body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--text-sm);
+    line-height: 1.65;
   }
 
   .ne-content {

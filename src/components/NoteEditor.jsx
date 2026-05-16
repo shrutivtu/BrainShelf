@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import Placeholder from '@tiptap/extension-placeholder';
 import { getEditorExtensions, INK_COLORS, HIGHLIGHT_COLORS } from '../utils/editorExtensions.js';
+import { playKeystroke, setActiveWritingSound, getActiveWritingSound, setForcedSound, clearForcedSound, cleanupSounds, SOUND_OPTIONS } from '../utils/writingSounds.js';
 
 const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
@@ -201,9 +202,13 @@ function Toolbar({ editor }) {
   );
 }
 
-export default function NoteEditor({ note, onUpdateTitle, onUpdateContent, onBack }) {
+export default function NoteEditor({ note, onUpdateTitle, onUpdateContent, onUpdatePageStyle, onBack }) {
   const [titleDraft, setTitleDraft] = useState(note?.title || '');
+  const [soundId, setSoundId] = useState(getActiveWritingSound);
+  const [soundPickerOpen, setSoundPickerOpen] = useState(false);
+  const soundPickerRef = useRef(null);
   const noteIdRef = useRef(note?.id);
+  const pageStyle = note?.pageStyle || 'notebook';
 
   useEffect(() => {
     setTitleDraft(note?.title || '');
@@ -222,8 +227,44 @@ export default function NoteEditor({ note, onUpdateTitle, onUpdateContent, onBac
     },
     editorProps: {
       attributes: { class: 'ne-body' },
+      handleKeyDown: () => {
+        playKeystroke();
+        return false;
+      },
     },
   });
+
+  const pickSound = useCallback((id) => {
+    setSoundId(id);
+    setActiveWritingSound(id);
+    setSoundPickerOpen(false);
+  }, []);
+
+  const togglePageStyle = useCallback(() => {
+    const next = pageStyle === 'notebook' ? 'clean' : 'notebook';
+    if (onUpdatePageStyle) onUpdatePageStyle(next);
+  }, [pageStyle, onUpdatePageStyle]);
+
+  useEffect(() => {
+    return () => cleanupSounds();
+  }, []);
+
+  useEffect(() => {
+    if (pageStyle === 'notebook') {
+      setForcedSound('pencil');
+    } else {
+      clearForcedSound();
+    }
+  }, [pageStyle]);
+
+  useEffect(() => {
+    if (!soundPickerOpen) return;
+    const close = (e) => {
+      if (soundPickerRef.current && !soundPickerRef.current.contains(e.target)) setSoundPickerOpen(false);
+    };
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, [soundPickerOpen]);
 
   useEffect(() => {
     noteIdRef.current = note?.id;
@@ -259,12 +300,13 @@ export default function NoteEditor({ note, onUpdateTitle, onUpdateContent, onBac
         </button>
       )}
       <input
-        className="ne-title"
+        className={`ne-title${pageStyle === 'clean' ? ' ne-title--clean' : ''}`}
         type="text"
         value={titleDraft}
         onChange={(e) => setTitleDraft(e.target.value)}
         onBlur={commitTitle}
         onKeyDown={(e) => {
+          playKeystroke();
           if (e.key === 'Enter') {
             e.preventDefault();
             editor?.commands.focus();
@@ -272,8 +314,45 @@ export default function NoteEditor({ note, onUpdateTitle, onUpdateContent, onBac
         }}
         placeholder="Untitled"
       />
-      <Toolbar editor={editor} />
-      <EditorContent editor={editor} className="ne-content" />
+      <div className="ne-toolbar-row">
+        <Toolbar editor={editor} />
+        <button
+          type="button"
+          className={`ne-style-toggle${pageStyle === 'notebook' ? ' is-notebook' : ''}`}
+          onClick={togglePageStyle}
+          title={pageStyle === 'notebook' ? 'Switch to clean style' : 'Switch to notebook style'}
+        >
+          {pageStyle === 'notebook' ? '📓' : '📄'}
+        </button>
+        <div className="ne-sound-picker" ref={soundPickerRef}>
+          <button
+            type="button"
+            className="ne-sound-picker__trigger"
+            onClick={() => setSoundPickerOpen((p) => !p)}
+            title="Writing sound"
+          >
+            {SOUND_OPTIONS.find((s) => s.id === soundId)?.icon || '🔇'}
+          </button>
+          {soundPickerOpen && (
+            <div className="ne-sound-picker__dropdown">
+              <div className="ne-sound-picker__title">Writing sound</div>
+              {SOUND_OPTIONS.map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  className={`ne-sound-picker__option${soundId === s.id ? ' is-active' : ''}`}
+                  onClick={() => pickSound(s.id)}
+                >
+                  <span className="ne-sound-picker__icon">{s.icon}</span>
+                  <span className="ne-sound-picker__label">{s.label}</span>
+                  {s.ambient && <span className="ne-sound-picker__badge">ambient</span>}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+      <EditorContent editor={editor} className={`ne-content${pageStyle === 'clean' ? ' ne-content--clean' : ''}`} />
       <div className="ne-meta">
         <time className="ne-meta__time">
           {note.updatedAt
