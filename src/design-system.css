@@ -1,96 +1,108 @@
-/* BrainShelf Design System — Color & Type Tokens
-   ===============================================
-   A warm, calm productivity palette. Think paper notebook in golden-hour
-   light. One muted sage accent. Five soft label dots. No pure white,
-   no pure black, no alarm red.
+/* BrainShelf Design System — Forest Theme
+   =========================================
+   Option A (light): dark forest-green sidebar, warm cream content area.
+   Option C (dark):  deep forest floor, bright moss accent, amber highlights.
+   No illustrations — forest lives in the palette.
    Fonts: Fraunces + Inter (loaded from index.html).
 */
 
 :root {
-  /* ------------------------------------------------------------------
-     COLOR — Canvas & Surfaces
-     ------------------------------------------------------------------
-     The page is warm off-white paper. Surfaces nudge a hair lighter or
-     darker. We never use pure #fff or #000.
+  /* ----------------------------------------------------------------
+     CANVAS & SURFACES — warm cream, professional and clean
   */
-  --canvas:            #F4F0E8;  /* page background — warm paper */
-  --surface-0:         #F7F4EE;  /* default card surface */
-  --surface-1:         #FBF8F2;  /* lifted card / popover */
-  --surface-1-hover:   #FFFBF4;  /* card hover */
-  --surface-sunk:      #EDE8DE;  /* sunk / inset (search field) */
-  --surface-line:      #E4DDCF;  /* hairline borders */
-  --surface-line-strong: #D4CAB6;/* slightly stronger hairline */
+  --canvas:              #F8F4EC;
+  --surface-0:           #F2EDE0;
+  --surface-1:           #FDFAF3;
+  --surface-1-hover:     #FFFFFF;
+  --surface-sunk:        #EAE4D4;
+  --surface-line:        #DDD5C0;
+  --surface-line-strong: #C8BC9A;
 
-  /* ------------------------------------------------------------------
-     COLOR — Ink (text)
-     ------------------------------------------------------------------
-     Warm near-black on paper. Three weights of foreground; nothing
-     lighter than fg-3 or it disappears on the warm canvas.
+  /* ----------------------------------------------------------------
+     INK — dark, warm, readable
   */
-  --ink-1:             #2A2724;  /* primary text */
-  --ink-2:             #5C574F;  /* secondary text, labels */
-  --ink-3:             #8A8377;  /* tertiary, placeholders, meta */
-  --ink-on-accent:     #FBF8F2;  /* text on sage accent */
+  --ink-1:           #1A1F1A;
+  --ink-2:           #4A5248;
+  --ink-3:           #7A8876;
+  --ink-on-accent:   #F8F4EC;
 
-  /* ------------------------------------------------------------------
-     COLOR — Accent (sage)
-     ------------------------------------------------------------------
-     One accent. Used for the primary CTA, the focus ring, and the
-     "one thing" highlight. Sparingly.
+  /* ----------------------------------------------------------------
+     ACCENT — forest green
   */
-  --accent:            #7A8F76;
-  --accent-hover:      #6B8067;
-  --accent-press:      #5D7159;
-  --accent-soft:       #E4EBE0;  /* tinted background for accent areas */
-  --accent-soft-line:  #C9D5C2;
+  --accent:          #2D6A4F;
+  --accent-hover:    #1B4332;
+  --accent-press:    #12302A;
+  --accent-soft:     #D8EAD8;
+  --accent-soft-line:#AECFAE;
 
-  /* ------------------------------------------------------------------
-     COLOR — Label dots (5)
-     ------------------------------------------------------------------
-     Muted, paper-toned hues. Each has a dot color (saturated enough to
-     read at 8px) and a soft bg (for the rare case we tint a row).
+  /* ----------------------------------------------------------------
+     SIDEBAR — deep forest green (applied via .rail selector in CSS)
   */
-  --label-urgent:        #C97A5C;  /* terracotta — never alarm-red */
-  --label-urgent-soft:   #F2DDD2;
-  --label-important:     #D9A85A;  /* warm amber */
-  --label-important-soft:#F4E4C8;
-  --label-idea:          #6F90AC;  /* dusty sky */
-  --label-idea-soft:     #DDE5EC;
-  --label-health:        #7A8F76;  /* sage (same as accent) */
-  --label-health-soft:   #E4EBE0;
-  --label-grocery:       #6B8E4E;  /* leafy produce green */
-  --label-grocery-soft:  #E0E8D2;
-  --label-people:        #9B86A8;  /* lavender */
-  --label-people-soft:   #E7E0EC;
+  --rail-bg:         #1B4332;
+  --rail-border:     #143828;
+  --rail-ink:        rgba(216, 240, 220, 0.75);  /* muted nav text */
+  --rail-ink-active: #D8F3DC;                     /* active nav text */
+  --rail-active-bg:  rgba(82, 183, 136, 0.18);   /* active nav bg */
+  --rail-hover-bg:   rgba(255, 255, 255, 0.07);
 
-  /* ------------------------------------------------------------------
-     COLOR — Status (used very sparingly)
-     ------------------------------------------------------------------ */
-  --status-success:    #6F8F6B;
-  --status-warning:    #C99A4F;
-  --status-error:      #B86B5A;  /* not pure red */
+  /* ----------------------------------------------------------------
+     LABEL DOTS — earthy naturals
+  */
+  --label-urgent:        #C0714A;
+  --label-urgent-soft:   #F5E0D4;
+  --label-important:     #C49A3A;
+  --label-important-soft:#F5E8C8;
+  --label-idea:          #5A8FAA;
+  --label-idea-soft:     #D8E8F0;
+  --label-health:        #2D6A4F;
+  --label-health-soft:   #D8EAD8;
+  --label-grocery:       #4A8040;
+  --label-grocery-soft:  #D8EAD0;
+  --label-people:        #8A6A9A;
+  --label-people-soft:   #E8DFF0;
 
-  /* ------------------------------------------------------------------
-     TYPOGRAPHY — Families
-     ------------------------------------------------------------------ */
+  /* ----------------------------------------------------------------
+     STATUS
+  */
+  --status-success: #2D6A4F;
+  --status-warning: #C49A3A;
+  --status-error:   #A85840;
+
+  /* ----------------------------------------------------------------
+     GLASS (used on cards in content area)
+  */
+  --glass-bg:            rgba(253, 250, 243, 0.9);
+  --glass-bg-strong:     rgba(255, 255, 255, 0.96);
+  --glass-border:        rgba(26, 31, 26, 0.1);
+  --glass-border-strong: rgba(26, 31, 26, 0.16);
+  --glass-blur:          16px;
+  --glass-shadow:
+    0 1px 3px rgba(26, 31, 26, 0.08),
+    0 4px 16px rgba(26, 31, 26, 0.06);
+
+  /* ----------------------------------------------------------------
+     BODY BACKGROUND — clean warm cream, no gradient needed
+  */
+  --bg-gradient: #F8F4EC;
+  --blob-1-color: transparent;
+  --blob-2-color: transparent;
+
+  /* ----------------------------------------------------------------
+     TYPOGRAPHY
+  */
   --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
   --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono:    ui-monospace, 'SF Mono', Menlo, monospace;
 
-  /* ------------------------------------------------------------------
-     TYPOGRAPHY — Scale
-     A small, tight scale. Display sizes use Fraunces; everything else
-     is Inter. We don't use display below 24px.
-  */
-  --text-xs:   12px;   /* meta, timestamps */
-  --text-sm:   13px;   /* secondary labels */
-  --text-base: 15px;   /* body */
-  --text-md:   16px;   /* prominent body, inputs */
-  --text-lg:   18px;   /* small headings */
-  --text-xl:   22px;   /* card titles */
-  --text-2xl:  28px;   /* section headers (Fraunces) */
-  --text-3xl:  36px;   /* page titles (Fraunces) */
-  --text-4xl:  48px;   /* hero / marketing (Fraunces) */
+  --text-xs:   12px;
+  --text-sm:   13px;
+  --text-base: 15px;
+  --text-md:   16px;
+  --text-lg:   18px;
+  --text-xl:   22px;
+  --text-2xl:  28px;
+  --text-3xl:  36px;
+  --text-4xl:  48px;
 
   --leading-tight: 1.25;
   --leading-snug:  1.4;
@@ -105,9 +117,9 @@
   --weight-medium:  500;
   --weight-semi:    600;
 
-  /* ------------------------------------------------------------------
-     SPACING — 4px base, but we live in the 16/24/32/48 zone
-     ------------------------------------------------------------------ */
+  /* ----------------------------------------------------------------
+     SPACING
+  */
   --space-1:  4px;
   --space-2:  8px;
   --space-3:  12px;
@@ -120,107 +132,120 @@
   --space-10: 64px;
   --space-11: 80px;
 
-  /* ------------------------------------------------------------------
+  /* ----------------------------------------------------------------
      RADII
-     ------------------------------------------------------------------ */
-  --radius-sm:    6px;   /* tiny elements (chip) */
-  --radius-md:    10px;  /* inputs, small buttons */
-  --radius-lg:    12px;  /* buttons */
-  --radius-xl:    16px;  /* cards */
-  --radius-2xl:   20px;  /* panels */
-  --radius-full:  999px; /* pills, dots */
+  */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  20px;
+  --radius-full: 999px;
 
-  /* ------------------------------------------------------------------
-     SHADOWS — restrained 2-stop elevation
-     ------------------------------------------------------------------ */
+  /* ----------------------------------------------------------------
+     SHADOWS
+  */
   --shadow-0: none;
   --shadow-1:
-    0 1px 2px rgba(42, 39, 36, 0.04),
-    0 2px 8px rgba(42, 39, 36, 0.04);
+    0 1px 2px rgba(26, 31, 26, 0.05),
+    0 2px 8px rgba(26, 31, 26, 0.05);
   --shadow-2:
-    0 2px 4px rgba(42, 39, 36, 0.05),
-    0 8px 24px rgba(42, 39, 36, 0.06);
+    0 2px 4px rgba(26, 31, 26, 0.06),
+    0 8px 24px rgba(26, 31, 26, 0.07);
+  --shadow-inset: inset 0 1px 0 rgba(26, 31, 26, 0.04);
 
-  /* Inset / sunk for inputs */
-  --shadow-inset: inset 0 1px 0 rgba(42, 39, 36, 0.04);
-
-  /* Focus ring */
   --ring: 0 0 0 2px var(--canvas), 0 0 0 4px var(--accent);
 
-  /* ------------------------------------------------------------------
+  /* ----------------------------------------------------------------
      MOTION
-     ------------------------------------------------------------------ */
+  */
   --ease-settle: cubic-bezier(0.32, 0.72, 0.32, 1);
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
-  --duration-1:  160ms; /* hover, focus */
-  --duration-2:  240ms; /* panels, tabs */
-  --duration-3:  360ms; /* routes */
+  --duration-1:  160ms;
+  --duration-2:  240ms;
+  --duration-3:  360ms;
 
-  /* ------------------------------------------------------------------
+  /* ----------------------------------------------------------------
      LAYOUT
-     ------------------------------------------------------------------ */
+  */
   --content-max: 1200px;
   --rail-width:  240px;
   --today-width: 320px;
 }
 
 /* ====================================================================
-   DARK THEME — Charcoal with warm undertones
-   Apply via data-theme="dark" on <html>.
+   DARK THEME — Option C: Night Canopy
+   Deep forest floor, bright moss accent, amber highlights.
    ==================================================================== */
 
 [data-theme="dark"] {
-  --canvas:            #1E1D1B;
-  --surface-0:         #262523;
-  --surface-1:         #2D2C29;
-  --surface-1-hover:   #343330;
-  --surface-sunk:      #171614;
-  --surface-line:      #3B3A36;
-  --surface-line-strong: #4D4B45;
+  --canvas:              #0D1F14;
+  --surface-0:           #112018;
+  --surface-1:           #162A1C;
+  --surface-1-hover:     #1C3422;
+  --surface-sunk:        #0A1810;
+  --surface-line:        #2A4835;
+  --surface-line-strong: #3A6048;
 
-  --ink-1:             #F0EDE6;
-  --ink-2:             #A8A59C;
-  --ink-3:             #7A776E;
-  --ink-on-accent:     #F0EDE6;
+  --ink-1:           #D8F0E0;
+  --ink-2:           #8AB89A;
+  --ink-3:           #507860;
+  --ink-on-accent:   #0D1F14;
 
-  --accent:            #8FA28B;
-  --accent-hover:      #7D9279;
-  --accent-press:      #A0B89C;
-  --accent-soft:       #2A3328;
-  --accent-soft-line:  #3D4C3A;
+  --accent:          #52B788;
+  --accent-hover:    #74C69D;
+  --accent-press:    #95D5B2;
+  --accent-soft:     #1A3828;
+  --accent-soft-line:#2A5038;
 
-  --label-urgent:        #D4896E;
-  --label-urgent-soft:   #3A2A22;
-  --label-important:     #DDB465;
-  --label-important-soft:#3A3020;
-  --label-idea:          #7FA0BC;
-  --label-idea-soft:     #222E38;
-  --label-health:        #8FA28B;
-  --label-health-soft:   #2A3328;
-  --label-grocery:       #94B070;
-  --label-grocery-soft:  #2A3322;
-  --label-people:        #AD98BA;
-  --label-people-soft:   #2E2636;
+  /* Sidebar — even deeper in dark mode */
+  --rail-bg:         #0A1810;
+  --rail-border:     #071008;
+  --rail-ink:        rgba(140, 200, 160, 0.6);
+  --rail-ink-active: #D8F3DC;
+  --rail-active-bg:  rgba(82, 183, 136, 0.2);
+  --rail-hover-bg:   rgba(82, 183, 136, 0.08);
 
-  --status-success:    #7FA27B;
-  --status-warning:    #D4A85A;
-  --status-error:      #C97A6A;
+  --label-urgent:        #D4856A;
+  --label-urgent-soft:   #2A1810;
+  --label-important:     #D4A840;
+  --label-important-soft:#2A2010;
+  --label-idea:          #70A8C8;
+  --label-idea-soft:     #182838;
+  --label-health:        #52B788;
+  --label-health-soft:   #183028;
+  --label-grocery:       #88C068;
+  --label-grocery-soft:  #1A2A12;
+  --label-people:        #B898C8;
+  --label-people-soft:   #251830;
+
+  --status-success: #52B788;
+  --status-warning: #D4A840;
+  --status-error:   #C07060;
+
+  --glass-bg:            rgba(22, 42, 28, 0.85);
+  --glass-bg-strong:     rgba(26, 50, 34, 0.95);
+  --glass-border:        rgba(82, 183, 136, 0.15);
+  --glass-border-strong: rgba(82, 183, 136, 0.25);
+  --glass-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.35);
+
+  --bg-gradient: #0D1F14;
+  --blob-1-color: transparent;
+  --blob-2-color: transparent;
 
   --shadow-1:
-    0 1px 2px rgba(0, 0, 0, 0.25),
-    0 2px 8px rgba(0, 0, 0, 0.2);
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.25);
   --shadow-2:
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    0 8px 24px rgba(0, 0, 0, 0.25);
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 8px 24px rgba(0, 0, 0, 0.35);
   --shadow-inset: inset 0 1px 0 rgba(0, 0, 0, 0.2);
-
-  --notepad-line: rgba(100, 95, 85, 0.2);
-  --notepad-margin: rgba(160, 100, 80, 0.12);
 }
 
 /* ====================================================================
    SEMANTIC TYPE STYLES
-   Use these classes (or copy the rules) instead of restyling tags.
    ==================================================================== */
 
 .bs-h1 {
@@ -232,7 +257,6 @@
   color: var(--ink-1);
   font-variation-settings: 'opsz' 96;
 }
-
 .bs-h2 {
   font-family: var(--font-display);
   font-weight: var(--weight-medium);
@@ -242,7 +266,6 @@
   color: var(--ink-1);
   font-variation-settings: 'opsz' 48;
 }
-
 .bs-h3 {
   font-family: var(--font-sans);
   font-weight: var(--weight-semi);
@@ -250,16 +273,13 @@
   line-height: var(--leading-snug);
   color: var(--ink-1);
 }
-
 .bs-title {
-  /* card title */
   font-family: var(--font-sans);
   font-weight: var(--weight-medium);
   font-size: var(--text-md);
   line-height: var(--leading-snug);
   color: var(--ink-1);
 }
-
 .bs-body {
   font-family: var(--font-sans);
   font-weight: var(--weight-regular);
@@ -268,7 +288,6 @@
   color: var(--ink-1);
   text-wrap: pretty;
 }
-
 .bs-body-sm {
   font-family: var(--font-sans);
   font-weight: var(--weight-regular);
@@ -276,17 +295,13 @@
   line-height: var(--leading-body);
   color: var(--ink-2);
 }
-
 .bs-label {
-  /* uppercase-free section labels */
   font-family: var(--font-sans);
   font-weight: var(--weight-medium);
   font-size: var(--text-sm);
   line-height: var(--leading-snug);
   color: var(--ink-2);
-  letter-spacing: var(--tracking-normal);
 }
-
 .bs-meta {
   font-family: var(--font-sans);
   font-weight: var(--weight-regular);
@@ -294,7 +309,6 @@
   line-height: var(--leading-snug);
   color: var(--ink-3);
 }
-
 .bs-quote {
   font-family: var(--font-display);
   font-weight: var(--weight-regular);
@@ -306,7 +320,7 @@
 }
 
 /* ====================================================================
-   GLOBAL DEFAULTS — opt-in by adding `bs-root` to a wrapping element
+   GLOBAL DEFAULTS
    ==================================================================== */
 .bs-root {
   background: var(--canvas);
@@ -326,241 +340,203 @@
   }
 }
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; }
+html { overflow-x: hidden; }
+body {
+  background: var(--canvas);
+  color: var(--ink-1);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
 
+/* Remove the blob pseudo-elements — not needed with solid palette */
+body::before, body::after { content: none; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body, #root { height: 100%; }
-    html { overflow-x: hidden; }
-    body {
-      background: var(--canvas);
-      color: var(--ink-1);
-      font-family: var(--font-sans);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
-      -webkit-text-size-adjust: 100%;
-    }
-    button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
-    input, textarea { font: inherit; color: inherit; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+input, textarea { font: inherit; color: inherit; }
 
-    /* ============ Page ============ */
-    .page {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 56px 32px 96px;
-      display: flex;
-      flex-direction: column;
-      gap: 56px;
-    }
+/* ============ Page ============ */
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 56px 32px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
 
-    .header {
-      display: flex; align-items: center; justify-content: space-between;
-      color: var(--ink-3);
-      font-size: var(--text-sm);
-    }
-    .header-brand { display: flex; align-items: center; gap: 10px; color: var(--ink-2); }
-    .header-brand img { width: 22px; height: 22px; opacity: 0.8; }
+/* ============ One Thing ============ */
+.one-thing {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.one-thing-label {
+  font-size: var(--text-sm);
+  color: var(--ink-3);
+  letter-spacing: 0;
+}
+.one-thing-card {
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 24px;
+  padding: 36px 36px 32px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  transition: background var(--duration-2) var(--ease-settle);
+}
+.one-thing-text {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 1.2;
+  color: var(--ink-1);
+  letter-spacing: -0.01em;
+  font-variation-settings: 'opsz' 96;
+  text-wrap: pretty;
+  flex: 1;
+}
+.one-thing-text-empty {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.3;
+  color: var(--ink-3);
+  font-style: italic;
+  font-variation-settings: 'opsz' 48;
+}
+.one-thing-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.one-thing-hint { font-size: var(--text-sm); color: var(--ink-3); }
+.one-thing-actions { display: flex; gap: 4px; }
+.one-thing-edit, .one-thing-done {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  color: var(--accent);
+  font-weight: 500;
+  transition: background var(--duration-1) var(--ease-settle);
+}
+.one-thing-edit:hover, .one-thing-done:hover {
+  background: var(--accent-soft);
+}
 
-    /* ============ The One Thing — visually dominant ============ */
-    .one-thing {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .one-thing-label {
-      font-size: var(--text-sm);
-      color: var(--ink-3);
-      letter-spacing: 0;
-    }
-    .one-thing-card {
-      background: var(--accent-soft);
-      border-radius: 24px;
-      padding: 36px 36px 32px;
-      min-height: 180px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      position: relative;
-      transition: background var(--duration-2) var(--ease-settle);
-    }
-    .one-thing-text {
-      font-family: var(--font-display);
-      font-weight: 400;
-      font-size: 38px;
-      line-height: 1.2;
-      color: var(--ink-1);
-      letter-spacing: -0.01em;
-      font-variation-settings: 'opsz' 96;
-      text-wrap: pretty;
-      flex: 1;
-    }
-    .one-thing-text-empty {
-      font-family: var(--font-display);
-      font-weight: 400;
-      font-size: 28px;
-      line-height: 1.3;
-      color: var(--ink-3);
-      font-style: italic;
-      font-variation-settings: 'opsz' 48;
-    }
-    .one-thing-foot {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px;
-    }
-    .one-thing-hint { font-size: var(--text-sm); color: var(--accent-press); }
-    .one-thing-actions { display: flex; gap: 4px; }
-    .one-thing-edit, .one-thing-done {
-      padding: 7px 14px;
-      border-radius: 999px;
-      font-size: var(--text-sm);
-      color: var(--accent-press);
-      transition: background var(--duration-1) var(--ease-settle);
-    }
-    .one-thing-edit:hover, .one-thing-done:hover {
-      background: rgba(122, 143, 118, 0.15);
-    }
+/* ============ Brain Dump ============ */
+.dump { display: flex; flex-direction: column; gap: 12px; }
+.dump-label { font-size: var(--text-sm); color: var(--ink-3); }
+.dump-input {
+  width: 100%;
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 20px;
+  padding: 24px 26px;
+  font-family: var(--font-sans);
+  font-size: 20px;
+  line-height: 1.45;
+  color: var(--ink-1);
+  resize: none;
+  outline: none;
+  min-height: 110px;
+  transition: border-color var(--duration-1) var(--ease-settle);
+}
+.dump-input::placeholder { color: var(--ink-3); }
+.dump-input:hover { border-color: var(--accent-soft-line); }
+.dump-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft), var(--glass-shadow);
+}
+.dump-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+  min-height: 22px;
+}
+.dump-hint { font-size: var(--text-xs); color: var(--ink-3); }
+.dump-save {
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--ink-on-accent);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-2) var(--ease-settle), background var(--duration-1) var(--ease-settle);
+}
+.dump-save.is-ready { opacity: 1; pointer-events: auto; }
+.dump-save:hover { background: var(--accent-hover); }
 
-    /* ============ Brain Dump — very prominent ============ */
-    .dump {
-      display: flex; flex-direction: column;
-      gap: 12px;
-    }
-    .dump-label {
-      font-size: var(--text-sm);
-      color: var(--ink-3);
-    }
-    .dump-input {
-      width: 100%;
-      background: var(--surface-1);
-      border: 1px solid var(--surface-line);
-      border-radius: 20px;
-      padding: 24px 26px;
-      font-family: var(--font-sans);
-      font-size: 20px;
-      line-height: 1.45;
-      color: var(--ink-1);
-      resize: none;
-      outline: none;
-      min-height: 110px;
-      transition: border-color var(--duration-1) var(--ease-settle), background var(--duration-1) var(--ease-settle);
-    }
-    .dump-input::placeholder { color: var(--ink-3); }
-    .dump-input:hover { border-color: var(--surface-line-strong); }
-    .dump-input:focus {
-      border-color: var(--accent-soft-line);
-      background: var(--surface-1-hover);
-    }
-    .dump-foot {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 4px;
-      min-height: 22px;
-    }
-    .dump-hint { font-size: var(--text-xs); color: var(--ink-3); }
-    .dump-save {
-      padding: 7px 16px;
-      border-radius: 999px;
-      background: var(--accent);
-      color: var(--ink-on-accent);
-      font-size: var(--text-sm);
-      font-weight: 500;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--duration-2) var(--ease-settle), background var(--duration-1) var(--ease-settle);
-    }
-    .dump-save.is-ready { opacity: 1; pointer-events: auto; }
-    .dump-save:hover { background: var(--accent-hover); }
+/* ============ Item list ============ */
+.recent { display: flex; flex-direction: column; gap: 14px; }
+.recent-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  color: var(--ink-3); font-size: var(--text-sm);
+}
+.recent-link {
+  color: var(--ink-3); font-size: var(--text-xs);
+  transition: color var(--duration-1) var(--ease-settle);
+}
+.recent-link:hover { color: var(--ink-1); }
+.recent-list { display: flex; flex-direction: column; gap: 2px; }
+.item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--surface-line);
+  animation: bs-fade-in var(--duration-2) var(--ease-settle);
+}
+.item:last-child { border-bottom: none; }
+.item-dot { width: 6px; height: 6px; border-radius: 999px; flex: none; background: var(--ink-3); }
+.item-text { flex: 1; font-size: var(--text-md); line-height: 1.4; color: var(--ink-1); text-wrap: pretty; }
+.item-actions { display: flex; gap: 2px; opacity: 0; transition: opacity var(--duration-1) var(--ease-settle); }
+.item:hover .item-actions { opacity: 1; }
+.item-action {
+  width: 28px; height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px; color: var(--ink-3);
+  transition: background var(--duration-1) var(--ease-settle), color var(--duration-1) var(--ease-settle);
+}
+.item-action:hover { background: var(--surface-sunk); color: var(--ink-1); }
+.item-action svg { width: 16px; height: 16px; }
+.recent-empty { padding: 24px 4px; color: var(--ink-3); font-size: var(--text-sm); font-style: italic; }
+.item.is-leaving { animation: bs-fade-out var(--duration-2) var(--ease-settle) forwards; }
 
-    /* ============ Recent (max 5-7) ============ */
-    .recent {
-      display: flex; flex-direction: column;
-      gap: 14px;
-    }
-    .recent-head {
-      display: flex; align-items: baseline; justify-content: space-between;
-      color: var(--ink-3);
-      font-size: var(--text-sm);
-    }
-    .recent-link {
-      color: var(--ink-3);
-      font-size: var(--text-xs);
-      transition: color var(--duration-1) var(--ease-settle);
-    }
-    .recent-link:hover { color: var(--ink-1); }
+/* ============ Toast ============ */
+.toast {
+  position: fixed; left: 50%; bottom: 32px;
+  transform: translateX(-50%);
+  background: var(--ink-1); color: var(--canvas);
+  padding: 10px 20px; border-radius: 999px;
+  font-size: var(--text-sm);
+  opacity: 0; transition: opacity var(--duration-2) var(--ease-settle);
+  pointer-events: none;
+}
+.toast.is-visible { opacity: 0.9; }
 
-    .recent-list { display: flex; flex-direction: column; gap: 2px; }
-    .item {
-      display: flex; align-items: center; gap: 14px;
-      padding: 14px 4px;
-      border-bottom: 1px solid var(--surface-line);
-      animation: bs-fade-in var(--duration-2) var(--ease-settle);
-    }
-    .item:last-child { border-bottom: none; }
-    .item-dot {
-      width: 6px; height: 6px; border-radius: 999px; flex: none;
-      background: var(--ink-3);
-    }
-    .item-text {
-      flex: 1;
-      font-size: var(--text-md);
-      line-height: 1.4;
-      color: var(--ink-1);
-      text-wrap: pretty;
-    }
-    .item-actions { display: flex; gap: 2px; opacity: 0; transition: opacity var(--duration-1) var(--ease-settle); }
-    .item:hover .item-actions { opacity: 1; }
-    .item-action {
-      width: 28px; height: 28px;
-      display: inline-flex; align-items: center; justify-content: center;
-      border-radius: 999px;
-      color: var(--ink-3);
-      transition: background var(--duration-1) var(--ease-settle), color var(--duration-1) var(--ease-settle);
-    }
-    .item-action:hover { background: var(--surface-sunk); color: var(--ink-1); }
-    .item-action svg { width: 16px; height: 16px; }
+@keyframes bs-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bs-fade-out {
+  from { opacity: 1; max-height: 60px; }
+  to   { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; border-color: transparent; }
+}
 
-    .recent-empty {
-      padding: 24px 4px;
-      color: var(--ink-3);
-      font-size: var(--text-sm);
-      font-style: italic;
-    }
-
-    /* ============ Done state ============ */
-    .item.is-leaving {
-      animation: bs-fade-out var(--duration-2) var(--ease-settle) forwards;
-    }
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 32px;
-      transform: translateX(-50%);
-      background: var(--ink-1);
-      color: var(--canvas);
-      padding: 10px 20px;
-      border-radius: 999px;
-      font-size: var(--text-sm);
-      opacity: 0;
-      transition: opacity var(--duration-2) var(--ease-settle);
-      pointer-events: none;
-    }
-    .toast.is-visible { opacity: 0.9; }
-
-    @keyframes bs-fade-in {
-      from { opacity: 0; transform: translateY(4px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes bs-fade-out {
-      from { opacity: 1; max-height: 60px; }
-      to   { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; border-color: transparent; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-    }
-
-    @media (max-width: 768px) {
-      .page { padding: 16px 16px 80px; gap: 32px; }
-      .one-thing-text { font-size: 26px; }
-      .dump-input { font-size: 17px; padding: 18px; border-radius: 16px; min-height: 90px; }
-    }
-  
+@media (max-width: 768px) {
+  .page { padding: 16px 16px 80px; gap: 32px; }
+  .one-thing-text { font-size: 26px; }
+  .dump-input { font-size: 17px; padding: 18px; border-radius: 16px; min-height: 90px; }
+}

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AuthGate from './components/AuthGate.jsx';
 import BrainDump from './components/BrainDump.jsx';
+import ForestBackground from './components/ForestBackground.jsx';
 import HealthActions from './components/HealthActions.jsx';
 import GroceryView from './components/GroceryView.jsx';
 import JournalView from './components/JournalView.jsx';
@@ -467,6 +468,8 @@ function AppInner({ userId, onSignOut }) {
 
   return (
     <div className="bs-root app-root">
+      <ForestBackground />
+
       {toast ? (
         <div className="toast is-visible" role="status" aria-live="polite">
           {toast}
@@ -533,6 +536,15 @@ function AppInner({ userId, onSignOut }) {
                   onMarkDone={handleOneThingMarkDone}
                   onClear={handleClearOneThing}
                   onSelectReplace={handleSetOneThing}
+                  todayPins={todayNotes}
+                  recentDumps={notes
+                    .filter((n) => n.section === 'inbox' && !n.isDone && n.section !== 'archive')
+                    .slice(0, 8)
+                    .map((n) => ({ text: n.text }))}
+                  healthNudges={notes
+                    .filter((n) => n.section === 'health' && !n.isDone)
+                    .slice(0, 3)
+                    .map((n) => n.text)}
                 />
                 <TodayPanel todayNotes={todayNotes} onUnpinToday={handleUnpinToday} />
               </div>

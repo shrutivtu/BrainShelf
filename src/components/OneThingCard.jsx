@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useWhatNowAgent } from '../hooks/useWhatNowAgent';
 
 export default function OneThingCard({
   note,
@@ -7,13 +8,32 @@ export default function OneThingCard({
   onMarkDone,
   onClear,
   onSelectReplace,
+  // Brain state props — passed from App.jsx to feed the agent
+  todayPins,
+  recentDumps,
+  lastHealthCheck,
+  healthNudges,
 }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(note?.text ?? '');
+  const { answer, loading, error, ask, clear } = useWhatNowAgent();
 
   useEffect(() => {
     setDraft(note?.text ?? '');
   }, [note?.id, note?.text]);
+
+  // Build the brain state object to send to the agent
+  function buildBrainState() {
+    return {
+      oneThing: note ? { text: note.text, label: note.label ?? 'default' } : null,
+      todayPins: todayPins ?? [],
+      recentDumps: recentDumps ?? [],
+      lastHealthCheck: lastHealthCheck ?? null,
+      healthNudges: healthNudges ?? [],
+    };
+  }
+
+  // ── Empty state ──────────────────────────────────────────────────────────
 
   if (!note) {
     return (
@@ -23,6 +43,12 @@ export default function OneThingCard({
         </h2>
         <div className="one-thing-card one-thing-card--empty">
           <p className="one-thing-text-empty">Choose one thing for now.</p>
+
+          {/* What now? agent button — works even when no one thing is set */}
+          <WhatNowButton loading={loading} onAsk={() => ask(buildBrainState())} onClear={clear} />
+          {answer && <AgentAnswer answer={answer} onDismiss={clear} />}
+          {error && <AgentError error={error} onDismiss={clear} />}
+
           <div className="one-thing-foot">
             <span className="one-thing-hint">put it here. sort it later.</span>
           </div>
@@ -52,6 +78,8 @@ export default function OneThingCard({
       </section>
     );
   }
+
+  // ── With note ────────────────────────────────────────────────────────────
 
   const tone = note.color && note.color !== 'default' ? note.color : 'default';
 
@@ -85,8 +113,13 @@ export default function OneThingCard({
             {note.text || 'Tap to add words'}
           </button>
         )}
+
+        {/* Agent answer / error shown inline */}
+        {answer && <AgentAnswer answer={answer} onDismiss={clear} />}
+        {error && <AgentError error={error} onDismiss={clear} />}
+
         <div className="one-thing-foot">
-          <span className="one-thing-hint">no rush. just this one.</span>
+          <WhatNowButton loading={loading} onAsk={() => ask(buildBrainState())} onClear={clear} />
           <div className="one-thing-actions">
             <button type="button" className="one-thing-done" onClick={() => onMarkDone(note.id)}>
               Mark done
@@ -97,6 +130,7 @@ export default function OneThingCard({
           </div>
         </div>
       </div>
+
       {candidateNotes.filter((n) => n.id !== note.id).length > 0 ? (
         <div className="one-thing-more">
           <label htmlFor="one-thing-swap">Replace with</label>
@@ -122,5 +156,53 @@ export default function OneThingCard({
         </div>
       ) : null}
     </section>
+  );
+}
+
+// ── Sub-components ──────────────────────────────────────────────────────────
+
+function WhatNowButton({ loading, onAsk, onClear }) {
+  return (
+    <button
+      type="button"
+      className="what-now-btn"
+      onClick={loading ? onClear : onAsk}
+      disabled={false}
+      aria-label={loading ? 'Cancel' : 'Ask Claude what to do right now'}
+    >
+      {loading ? (
+        <>
+          <span className="what-now-spinner" aria-hidden="true" />
+          thinking…
+        </>
+      ) : (
+        <>⚡ What should I do right now?</>
+      )}
+    </button>
+  );
+}
+
+function AgentAnswer({ answer, onDismiss }) {
+  return (
+    <div className="agent-answer" role="status" aria-live="polite">
+      <p className="agent-answer-text">{answer}</p>
+      <button
+        type="button"
+        className="agent-answer-dismiss"
+        onClick={onDismiss}
+        aria-label="Dismiss suggestion"
+      >
+        ✕
+      </button>
+    </div>
+  );
+}
+
+function AgentError({ error, onDismiss }) {
+  return (
+    <div className="agent-error" role="alert">
+      <p className="agent-error-text">Couldn't reach the agent: {error}</p>
+      <button type="button" onClick={onDismiss} aria-label="Dismiss error">✕</button>
+    </div>
   );
 }
